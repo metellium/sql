@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+   <title>Catálogo de Servicios</title>
+
+   <!-- las importacines se hacen desde head-->
+	<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" type="text/css" href="css/mystilo.css">
+	<script type="text/javascript" src="js/jquery.js"></script> <!-- copiar los nombres de las librerias y colocar un src -->
+	<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+	<script type="text/javascript" src="cordova.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+      //Evento para registrar servicios
+			//$("#btnGuardar").click(function(){
+      $("#btnGuardar").tap(function(){
+			var nombre=$("#NomServicios").val();
+			var direccion=$("#Direccion").val();
+			var rfc=$("#RFC").val();
+			var telefono=$("#Telefono").val();
+			var clasificacion=$("#Clasificacion").val();
+			var btnfoto="img/fotos/foto1.jpg";
+			var latitud=$("#latitud").val();
+			var longitud=$("#longitud").val();
+			$.ajax({
+				type:"POST",
+				url:"http://www.metellium.com/Guardar.php",
+				data:"Nom="+nombre+"&Dir="+direccion+"&RFC="+rfc+"&Tel="+telefono+"&clas="+clasificacion+"&bfoto="+btnfoto+"&lat="+latitud+"&lon="+longitud,
+				success:function respuesta(datos){
+					alert(datos);
+		             }
+			       });
+      });
+      //evento para consulta
+      $("#btnConServ").tap(function(){
+        // este botón es para consultar
+        $.ajax({
+          type:"POST",
+          url:"http://www.metellium.com/Consulta.php",
+          data:"",
+          success: function consultaTodo(datos){
+         //alert(datos);
+            var reg=$.parseJSON(datos);
+            var contenido=$("#datosTodos");
+            contenido.html("<table border='1' id='tb1'><th>Id</th><th>Nombre</th><th>Dirección</th><th>RFC</th><th>Telefono</th><th>Clasificacion</th><th>Foto</th><th>latitud</th><th>Longitud</th>");
+            var fila=$("#tb1");
+            for (var i in reg) {
+              fila.append(
+                "<tr><td>"+reg[i].Id_Servicio+
+                "</td><td>"+reg[i].Nombre_servicio+
+                "</td><td>"+reg[i].Direccion+
+                "</td><td>"+reg[i].RFC+
+                "</td><td>"+reg[i].Telefono+
+                "</td><td>"+reg[i].Clasificacion+
+                "</td><td>"+reg[i].Foto+
+                "</td><td>"+reg[i].Latitud+
+                "</td><td>"+reg[i].Longitud+"</td></tr>");
+            }
+            fila.append("</table>");
+          }
+        });
+      });
+		});
+	</script>
+</head>
+<body>
+<div data-role="page" id="principal">
+     <div data-role="header"><p>Catálogo de Servicios</p></div>
+     <div data-role="header" ><p> Operaciones</p></div>
+
+   <div class ="ui-content">
+   		<ul data-role="listview" >
+
+	 		<li> <a href="#Registra"   >Registra Servicios </a></li>
+	 		<li>  <a href="#Consultar" >Consultar Servicios </a></li>
+	 		<li>  <a href="#Actualizar" >Actualizar Servicios </a></li>
+	 		<li>  <a href="#Eliminar"  >Eliminar Servicios </a></li>
+		</ul>
+	</div>
+	<div data-role="footer">
+	</div>
+	</div>
+	<div data-role="page" id="Registra">
+		<div data-role="header">
+			<p> Registro de Servicios </p>
+		</div>
+		<div data-role="content">
+			<input type="text" id="NomServicios" placeholder="Nombre del servicio">
+			<input type="text" id="Direccion" placeholder="Dirección">
+			<input type="text" id="RFC" placeholder="RFC">
+			<input type="text" id="Telefono" placeholder="Teléfono">
+			<select id="Clasificacion">
+				<option value="1">Restaurante</option>
+				<option value="2">Zapatería</option>
+				<option value="3">Farmacia</option>
+			</select>
+			<input type="button" id="btnFoto" value="Tomar Foto">
+			<input type="button" id="btnCoordenadas" value="Obtener Coordenadas">
+			<input type="text" id="latitud" placeholder="Latitud">
+			<input type="text" id="longitud" placeholder="Longitud">
+			<input type="button" id="btnGuardar" value="Guardar Servicio">
+		</div>
+	<div data-role="footer">
+	<center><a href="#principal"  class="ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Regresar</a> </center>
+	</div>
+</div>
+<div data-role="page" id="Consultar">
+	<div data-role="header">
+	   <p> Consultar de Servicios </p>
+	</div>
+	<div data-role="content">
+      <input type="button" id="btnConServ" value="Consultar todos los servicios">
+      <center><div id="datosTodos">
+
+      </div></center>
+	</div>
+	     <div data-role="footer">
+	       <a href="#principal"  class="ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Regresar</a>
+	     </div>
+  </div>
+
+    <div data-role="page" id="Actualizar">
+	     <div data-role="header">
+	        <p> Actualizar de Servicios </p>
+	     </div>
+	<div data-role="content">
+	<input type="text" id="NomServicios" placeholder="Nombre del servicio">
+	<input type="text" id="Direccion" placeholder="Dirección">
+	<input type="text" id="RFC" placeholder="RFC">
+	<input type="text" id="Telefono" placeholder="Teléfono">
+	<input type="button" id="btnServicios" value="Hospital">
+	<input type="button" id="btnFoto" value="Tomar Foto">
+	<input type="button" id="btnCoordenadas" value="Obtener Coordenadas">
+	<input type="text" id="Longitud" placeholder="Longitud">
+	<input type="text" id="Amplitud" placeholder="Amplitud">
+	<input type="button" id="btnGuardar" value="Guardar Servicio">
+	</div>
+	<div data-role="footer">
+	<a href="#principal"  class="ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Regresar</a>
+	</div>
+</div>
+
+<div data-role="page" id="Eliminar">
+	<div data-role="header">
+	<p> Eliminar de Servicios </p>
+	</div>
+	<div data-role="content">
+	<input type="text" id="NomServicios" placeholder="Nombre del servicio">
+	<input type="text" id="Direccion" placeholder="Dirección">
+	<input type="text" id="RFC" placeholder="RFC">
+	<input type="text" id="Telefono" placeholder="Teléfono">
+	<input type="button" id="btnServicios" value="Hospital">
+	<input type="button" id="btnFoto" value="Tomar Foto">
+	<input type="button" id="btnCoordenadas" value="Obtener Coordenadas">
+	<input type="text" id="Longitud" placeholder="Longitud">
+	<input type="text" id="Amplitud" placeholder="Amplitud">
+	<input type="button" id="btnGuardar" value="Guardar Servicio">
+	</div>
+	<div data-role="footer">
+	<a href="#principal"  class="ui-btn ui-icon-home ui-btn-icon-left" data-transition="pop">Regresar</a>
+	</div>
+</div>
+
+</body>
+</html>
